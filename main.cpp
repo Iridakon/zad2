@@ -3,7 +3,8 @@
 #include "math.h"
 
 double f(double x){
-    return ((x*sin(x))*(x*sin(x)));
+    //return ((x*sin(x))*(x*sin(x)));
+    return (1/((1+2*x)*(1+2*x)));
 }
 double Ans(double a, double b)
 {
@@ -64,7 +65,7 @@ double Gauss2(double left, double right, int N)//метод Симnсона
     double pos=left;
     double kor,ab;
     for (int i = 0; i < N; ++i) {
-        kor=shag/(2* sqrt(3));
+        kor=shag/(2* sqrt(3.0));
         ab=pos+shag/2;
         sum+=(f(ab+kor)+f(ab-kor))*shag/2;
         pos+=shag;
@@ -87,22 +88,31 @@ double Gauss3(double left, double right, int N)//метод Симnсона
     }
     return sum;
 }
-double Better(double In,double In2,int p)
+double Better(double In,double In2,float p)
 {
-    double alpha=1/(1-pow(2,p));
+    double  alpha;
+    if (p>=0){
+     alpha=1/(1-pow(2,p));}
+    else{
+        p=-1*p;
+         alpha=1/(1-1/pow(2,p));
+    }
+    //printf("%f \n",pow(2,p));
     return abs(alpha*In+(1-alpha)*In2);
+
 }
 int main() {
     SetConsoleOutputCP(CP_UTF8);
-    double a=0;
-    double b=M_PI/2;
-    double ans=pow(M_PI,3)/48+M_PI/8;
-    int N=10;
+    double a=1;
+    double b=4;
+    //double ans=pow(M_PI,3)/48+M_PI/8;
+    double ans=1.0/9;
+    int N=20;
     //Trap(a,b,N);
 
     printf("Кол-во узлов   \t%i\t\t%i \t\tИзменение \tУлучш\n",N,N*2);
     double y1,y2;
-    /*
+
     y1=Ans(LPramoug(a,b,N),ans);
     y2=Ans(LPramoug(a,b,2*N),ans);
     printf("Левые пр        %8.12f   %8.12f  %5.2f   %8.12f\n",y1,y2,y1/y2, Better(y1,y2,1));
@@ -115,13 +125,13 @@ int main() {
     y1=Ans(Simp(a,b,N),ans);
     y2=Ans(Simp(a,b,N*2),ans);
     printf("Сипсон          %8.12f   %8.12f  %5.2f   %8.12f\n",y1,y2,y1/y2,Better(y1,y2,4));
-     */
+
     y1=Ans(Gauss2(a,b,N),ans);
     y2=Ans(Gauss2(a,b,N*2),ans);
     printf("Гаусс по 2      %8.12f   %8.12f  %5.2f   %8.12f\n",y1,y2,y1/y2,Better(y1,y2,4));
     y1=Ans(Gauss3(a,b,N),ans);
     y2=Ans(Gauss3(a,b,N*2),ans);
-    printf("Гаусс по 3      %8.12f   %8.12f  %5.2f   %8.12f\n",y1,y2,y1/y2,Better(y1,y2,1));
+    printf("Гаусс по 3      %8.12f   %8.12f  %5.2f   %8.12f\n",y1,y2,y1/y2,Better(y1,y2,6));
 
     return 0;
 }
